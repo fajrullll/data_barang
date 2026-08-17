@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Barang;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class BarangController extends Controller
 {
@@ -31,21 +32,23 @@ class BarangController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'kode_barang' => 'required|unique:barangs,kode_barang',
             'nama_barang' => 'required',
             'kategori' => 'required',
             'stok' => 'required|integer|min:0',
             'harga' => 'required|numeric|min:0',
         ]);
 
+        do {
+            $kodeBarang = 'BRG-' . strtoupper(Str::random(6));
+        } while (Barang::where('kode_barang', $kodeBarang)->exists());
+
         Barang::create([
-            'kode_barang' => $request->kode_barang,
+            'kode_barang' => $kodeBarang,
             'nama_barang' => $request->nama_barang,
             'kategori' => $request->kategori,
             'stok' => $request->stok,
             'harga' => $request->harga,
         ]);
-
         return redirect()
             ->route('barang.index')
             ->with('success', 'Data barang berhasil ditambahkan.');

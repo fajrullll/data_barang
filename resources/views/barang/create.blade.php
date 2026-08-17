@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,87 +73,74 @@
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <h1>Tambah Barang</h1>
+        <h1>Tambah Barang</h1>
 
-    {{-- Menampilkan error validasi --}}
-    @if ($errors->any())
+        {{-- Menampilkan error validasi --}}
+        @if ($errors->any())
         <div class="error">
             <ul>
                 @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
+                <li>{{ $error }}</li>
                 @endforeach
             </ul>
         </div>
-    @endif
+        @endif
 
-    <form action="{{ route('barang.store') }}" method="POST">
+        <form action="{{ route('barang.store') }}" method="POST">
 
-        @csrf
+            @csrf
 
-        <label for="kode_barang">Kode Barang</label>
-        <input
-            type="text"
-            id="kode_barang"
-            name="kode_barang"
-            value="{{ old('kode_barang') }}"
-            placeholder="Contoh: BRG001"
-            required
-        >
+            <label for="nama_barang">Nama Barang</label>
+            <input
+                type="text"
+                id="nama_barang"
+                name="nama_barang"
+                value="{{ old('nama_barang') }}"
+                placeholder="Contoh: Laptop"
+                required>
 
-        <label for="nama_barang">Nama Barang</label>
-        <input
-            type="text"
-            id="nama_barang"
-            name="nama_barang"
-            value="{{ old('nama_barang') }}"
-            placeholder="Contoh: Laptop"
-            required
-        >
+            <label for="kategori">Kategori</label>
+            <input
+                type="text"
+                id="kategori"
+                name="kategori"
+                value="{{ old('kategori') }}"
+                placeholder="Contoh: Elektronik"
+                required>
 
-        <label for="kategori">Kategori</label>
-        <input
-            type="text"
-            id="kategori"
-            name="kategori"
-            value="{{ old('kategori') }}"
-            placeholder="Contoh: Elektronik"
-            required
-        >
+            <label for="stok">Stok</label>
+            <input
+                type="number"
+                id="stok"
+                name="stok"
+                value="{{ old('stok', 0) }}"
+                min="0"
+                required>
 
-        <label for="stok">Stok</label>
-        <input
-            type="number"
-            id="stok"
-            name="stok"
-            value="{{ old('stok', 0) }}"
-            min="0"
-            required
-        >
+            <label for="harga">Harga</label>
+            <input
+                type="number"
+                id="harga"
+                name="harga"
+                value="{{ old('harga') }}"
+                min="0"
+                placeholder="Contoh: 5000000"
+                required>
 
-        <label for="harga">Harga</label>
-        <input
-            type="number"
-            id="harga"
-            name="harga"
-            value="{{ old('harga') }}"
-            min="0"
-            placeholder="Contoh: 5000000"
-            required
-        >
+            <button type="submit">
+                Simpan Barang
+            </button>
 
-        <button type="submit">
-            Simpan Barang
-        </button>
+            <a href="{{ route('barang.index') }}" class="kembali">
+                Kembali
+            </a>
 
-        <a href="{{ route('barang.index') }}" class="kembali">
-            Kembali
-        </a>
+        </form>
 
-    </form>
-
-</div>
+    </div>
 
 </body>
+
 </html>
