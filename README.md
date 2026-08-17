@@ -131,7 +131,7 @@ View berada di `resources/views` dan menggunakan Blade.
 
 ### Folder `barang`
 
-- `index.blade.php`: tabel daftar barang serta tombol tambah, edit, dan hapus.
+- `index.blade.php`: halaman dashboard modern 2 panel (tabel Data Barang scrollable di kiri ±70% dan Doughnut Chart Kategori Barang dinamis di kanan ±30%).
 - `create.blade.php`: formulir tambah barang.
 - `edit.blade.php`: formulir edit barang.
 
