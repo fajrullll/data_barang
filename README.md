@@ -4,7 +4,7 @@ Aplikasi Laravel ini digunakan untuk mengelola data **barang** dan **kategori** 
 
 ## Alur Aplikasi
 
-```texts
+```text
 Pengguna membuka URL
         ↓
 Route menerima request
@@ -210,6 +210,3 @@ Buka:
 
 - `http://127.0.0.1:8000/barang` untuk CRUD barang.
 - `http://127.0.0.1:8000/kategori` untuk CRUD kategori.
-  #   d a t a _ b a r a n g 
-   
-   
