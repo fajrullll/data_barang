@@ -181,6 +181,134 @@
             box-shadow: 0 10px 22px rgba(13, 104, 64, 0.22);
         }
 
+        /* ===============================
+   PANEL ACTION
+================================ */
+
+        .panel-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+
+        /* ===============================
+   SEARCH BAR
+================================ */
+
+        .search-form {
+            margin: 0;
+        }
+
+        .search-box {
+            position: relative;
+            width: 250px;
+        }
+
+        .search-input {
+            width: 100%;
+            min-height: 40px;
+
+            padding: 0 38px 0 40px;
+
+            border: 1px solid rgba(22, 132, 84, 0.16);
+            border-radius: 12px;
+
+            color: var(--ink);
+            background: rgba(255, 255, 255, 0.9);
+
+            font-size: 0.82rem;
+
+            outline: none;
+
+            transition:
+                border-color 180ms ease,
+                box-shadow 180ms ease,
+                background-color 180ms ease;
+        }
+
+        .search-input::placeholder {
+            color: #92a097;
+        }
+
+        .search-input:hover {
+            border-color: rgba(22, 132, 84, 0.3);
+        }
+
+        .search-input:focus {
+            border-color: var(--green);
+
+            background: #ffffff;
+
+            box-shadow:
+                0 0 0 3px rgba(22, 132, 84, 0.10);
+        }
+
+
+        /* Icon search */
+
+        .search-submit {
+            position: absolute;
+
+            left: 11px;
+            top: 50%;
+
+            width: 20px;
+            height: 20px;
+
+            padding: 0;
+
+            border: 0;
+
+            color: var(--green-dark);
+            background: transparent;
+
+            transform: translateY(-50%);
+
+            cursor: pointer;
+        }
+
+        .search-submit svg {
+            width: 18px;
+            height: 18px;
+
+            display: block;
+        }
+
+
+        /* Tombol X ketika search aktif */
+
+        .search-clear {
+            position: absolute;
+
+            right: 10px;
+            top: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 22px;
+            height: 22px;
+
+            border-radius: 50%;
+
+            color: #68776f;
+            background: #eef3f0;
+
+            text-decoration: none;
+
+            transform: translateY(-50%);
+
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .search-clear:hover {
+            color: var(--green-dark);
+            background: var(--green-soft);
+        }
+
         .success {
             flex: 0 0 auto;
             margin-bottom: 18px;
@@ -516,6 +644,25 @@
             .btn-add {
                 width: 100%;
             }
+
+            .panel-actions {
+                width: 100%;
+
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-form {
+                width: 100%;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .btn-add {
+                width: 100%;
+            }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -532,7 +679,7 @@
 
 <body>
     @php
-    $categoryCounts = $barangs->groupBy('kategori')->map->count();
+    $categoryCounts = $allBarangs->groupBy('kategori')->map->count();
     $chartColors = ['#168454', '#e4a72d', '#4f7cac', '#9b6bc4', '#d26464', '#43a6a1', '#d47c3c', '#758c55'];
     @endphp
 
@@ -543,19 +690,112 @@
                 <h1>Data Barang</h1>
                 <p class="subtitle">Kelola stok, harga, dan kategori barang secara ringkas.</p>
             </div>
-            <div class="summary-chip">{{ $barangs->count() }} barang tercatat</div>
+            <div class="summary-chip">
+
+                @if ($search)
+
+                {{ $barangs->count() }}
+                hasil dari
+                {{ $allBarangs->count() }}
+                barang
+
+                @else
+
+                {{ $allBarangs->count() }}
+                barang tercatat
+
+                @endif
+
+            </div>
         </header>
 
         <div class="dashboard-grid">
             <section class="glass-panel table-panel" aria-labelledby="table-title">
                 <div class="panel-header">
+
                     <div class="panel-title">
-                        <h2 id="table-title">Daftar Barang</h2>
-                        <p>Informasi inventori terbaru</p>
+
+                        <h2 id="table-title">
+                            Daftar Barang
+                        </h2>
+
+                        <p>
+                            Informasi inventori terbaru
+                        </p>
+
                     </div>
-                    <a id="add-item-button" href="{{ route('barang.create') }}" class="btn btn-add">
-                        <span aria-hidden="true">+</span> Tambah Barang
-                    </a>
+
+
+                    <div class="panel-actions">
+
+                        {{-- Tombol Tambah Barang --}}
+                        <a
+                            id="add-item-button"
+                            href="{{ route('barang.create') }}"
+                            class="btn btn-add">
+                            <span aria-hidden="true">+</span>
+
+                            Tambah Barang
+                        </a>
+
+
+                        {{-- Search Barang --}}
+                        <form
+                            action="{{ route('barang.index') }}"
+                            method="GET"
+                            class="search-form">
+
+                            <div class="search-box">
+
+                                {{-- Tombol/icon search --}}
+                                <button
+                                    type="submit"
+                                    class="search-submit"
+                                    aria-label="Cari barang">
+
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2">
+                                        <circle cx="11" cy="11" r="7"></circle>
+
+                                        <path d="m20 20-3.5-3.5"></path>
+                                    </svg>
+
+                                </button>
+
+
+                                {{-- Input Search --}}
+                                <input
+                                    type="search"
+                                    name="search"
+                                    class="search-input"
+                                    placeholder="Cari barang..."
+                                    value="{{ $search }}"
+                                    autocomplete="off">
+
+
+                                {{-- Hapus pencarian --}}
+                                @if ($search)
+
+                                <a
+                                    href="{{ route('barang.index') }}"
+                                    class="search-clear"
+                                    aria-label="Hapus pencarian"
+                                    title="Hapus pencarian">
+                                    ×
+                                </a>
+
+                                @endif
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
                 </div>
 
                 @if (session('success'))
@@ -597,7 +837,13 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="7" class="empty-cell">Belum ada data barang.</td>
+                                <td colspan="7" class="empty-cell">
+                                    @if ($search)
+                                    Tidak ada barang yang cocok dengan "{{ $search }}".
+                                    @else
+                                    Belum ada data barang.
+                                    @endif
+                                </td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -623,7 +869,7 @@
                         data-values="{{ $categoryCounts->values()->toJson() }}"
                         data-palette="{{ collect($chartColors)->toJson() }}"></canvas>
                     <div class="chart-center" aria-hidden="true">
-                        <span class="chart-total">{{ $barangs->count() }}</span>
+                        <span class="chart-total">{{ $allBarangs->count() }}</span>
                         <span class="chart-label">Total Barang</span>
                     </div>
                     @else

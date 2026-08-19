@@ -11,11 +11,37 @@ class BarangController extends Controller
     /**
      * Menampilkan semua data barang.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $barangs = Barang::latest()->get();
+        // Mengambil keyword dari URL:
+        // contoh: /barang?search=laptop
+        $search = trim((string) $request->query('search'));
 
-        return view('barang.index', compact('barangs'));
+        // Query data barang
+        $barangs = Barang::query()
+            ->when($search !== '', function ($query) use ($search) {
+
+                $query->where(function ($q) use ($search) {
+
+                    $q->where('kode_barang', 'like', '%' . $search . '%')
+                        ->orWhere('nama_barang', 'like', '%' . $search . '%')
+                        ->orWhere('kategori', 'like', '%' . $search . '%')
+                        ->orWhere('stok', 'like', '%' . $search . '%')
+                        ->orWhere('harga', 'like', '%' . $search . '%');
+                });
+            })
+            ->latest()
+            ->get();
+
+        // Semua barang tetap dibutuhkan untuk total barang
+        // dan chart kategori agar chart tidak berubah ketika search.
+        $allBarangs = Barang::all();
+
+        return view('barang.index', compact(
+            'barangs',
+            'allBarangs',
+            'search'
+        ));
     }
 
     /**
